@@ -1,0 +1,2 @@
+#The requirements.txt file tells the python virtual env which libraries it needs to run the app.
+psycopg2==2.8.6
