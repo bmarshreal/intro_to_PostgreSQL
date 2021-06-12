@@ -1,15 +1,22 @@
 # The main app.
+from database import Database
 from user import User
+from database import Database
+
+Database.initialise()  # Initialize Database
+
+user = User('yoyoyo@yahoo.com', 'yo', 'yo', None)  # Write to DB
+
+user.save_to_db()  # Commit to DB
+
+user_from_db = User.load_from_db_by_email('yoyoyo@yahoo.com')  # Retrieve from DB
+
+print(user_from_db)  # Print retrieved data from DB
 
 
-my_user = User('annasmith@yahoo.com', 'Anna', 'Smith', None)  # id will be filled by DB
 
-# Call method from User class to SAVE TO database
-my_user.save_to_db()
+# print(Database.connection_pool)
 
+# Database.initialise()
 
-user_from_db = User.load_from_db_by_email('annasmith@yahoo.com')
-print(user_from_db)
-
-# Call method from User class to FETCH data FROM database by email
-#  my_user.load_from_db_by_email()
+# print(Database.connection_pool)
