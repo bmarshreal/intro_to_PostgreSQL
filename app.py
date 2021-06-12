@@ -3,7 +3,7 @@ from database import Database
 from user import User
 from database import Database
 
-Database.initialise()  # Initialize Database
+Database.initialise(database='learning', host='localhost', user='postgres', password='SuperKade@061490')  # Initialize Database
 
 user = User('yoyoyo@yahoo.com', 'yo', 'yo', None)  # Write to DB
 

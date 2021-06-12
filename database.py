@@ -2,36 +2,37 @@
 import psycopg2
 from psycopg2 import pool
 
+
 # Connect to the DB(user, password, database name, location of the database(server where its running))
 
-# Create a Connection Pool class
+# Create a Connection Pool class to SAVE EXPENSIVE time from creating multiple connections.
+# A connection pool is when you open up multiple connections to the database, so that when sending or...
+# ...retrieving data is required one of the connections can be used.
+# That way there is no need to open connections, as that is expensive in terms of the time it takes.
 
 
 class Database:
-    connection_pool = None
+    __connection_pool = None  # __<variable name> creates a private variable
 
     @classmethod
-    def initialise(cls):
-        cls.connection_pool = pool.SimpleConnectionPool(minconn=1,
-                                                             # Minimum allowable connections at any given time
-                                                             maxconn=10,
-                                                             # Maximum allowable connections at any given time
-                                                             user='postgres',
-                                                             password='SuperKade@061490',
-                                                             database='learning',
-                                                             host='localhost')
+    def initialise(cls, **kwargs):  # **kwargs means allow any number of named variables
+        cls.__connection_pool = pool.SimpleConnectionPool(minconn=1,
+                                                          # Minimum allowable connections at any given time
+                                                          maxconn=10,
+                                                          # Maximum allowable connections at any given time
+                                                          **kwargs)
 
     @classmethod
     def get_connection(cls):  # cls = Database
-        return cls.connection_pool.getconn()
+        return cls.__connection_pool.getconn()
 
     @classmethod
     def return_connection(cls, connection):
-        return cls.connection_pool.putconn(connection)
+        return cls.__connection_pool.putconn(connection)
 
     @classmethod
     def close_all_connections(cls):
-        Database.connection_pool.closeall()
+        Database.__connection_pool.closeall()
 
 
 # Creating a ConnectionPool class
@@ -60,4 +61,4 @@ class CursorFromConnectionFromPool:
             # Return the connections to the Connection Pool
             self.cursor.close()  # Close Cursor then commit to the connection
             self.connection.commit()  # Commit connection before closing, to save to DB
-            Database.return_connection(self.connection)
+        Database.return_connection(self.connection)

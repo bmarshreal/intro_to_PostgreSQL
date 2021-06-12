@@ -21,8 +21,8 @@ class User:
             # Create a cursor to navigate through DB
             # Running some code...Always close cursor after running a query to DB
             # Database syntax %s = string
-            cursor.execute('INSERT INTO users(email, first_name, last_name)values (%s, %s, %s)',  # Execute SQL
-                           (self.email, self.first_name, self.last_name))
+            cursor.execute('INSERT INTO users(email, first_name, last_name)values (%s, %s, %s)',  # Execute SQL query
+                           (self.email, self.first_name, self.last_name))  # Parameters that should be in the executed SQL query
 
     # RETRIEVING DATA FROM POSTGRESQL
 
