@@ -5,16 +5,20 @@ from psycopg2 import pool
 
 # Connect to the DB(user, password, database name, location of the database(server where its running))
 
-# Create a Connection Pool class to SAVE EXPENSIVE time from creating multiple connections.
+# Create a Connection Pool as a class to SAVE EXPENSIVE time from creating multiple connections.
 # A connection pool is when you open up multiple connections to the database, so that when sending or...
 # ...retrieving data is required one of the connections can be used.
 # That way there is no need to open connections, as that is expensive in terms of the time it takes.
 
 
-class Database:
+class Database:  # We make the connection pool into a class so we can call it when we need it...
+                 #  ...and it doesnt automatically get executed.
     __connection_pool = None  # __<variable name> creates a private variable
 
+
     @classmethod
+    # The CONNECTION_POOL property will initially have no value, once we execute  the initialise method...
+    # ...we will give the CONNECTION_POOL property the value passed to the initialise method from app.py
     def initialise(cls, **kwargs):  # **kwargs means allow any number of named variables
         cls.__connection_pool = pool.SimpleConnectionPool(minconn=1,
                                                           # Minimum allowable connections at any given time
@@ -29,6 +33,12 @@ class Database:
     @classmethod
     def return_connection(cls, connection):
         return cls.__connection_pool.putconn(connection)
+        # Connection Object is automatically...
+        # ... generated when we establish a connection to our DB.
+        # <connection object at 0x0000017B0419F040; dsn: 'user=postgres password=xxx dbname=learning host=localhost', closed: 0>
+        # i.e. connection = psycopg2.connect(database='my_database_name')
+        # print(connection.dsn) OUTPUT: dbname=my_database_name
+
 
     @classmethod
     def close_all_connections(cls):
